@@ -93,8 +93,7 @@ class PDFRAGReader:
             print("🔧 Initializing embeddings (this may take a few minutes for large PDFs)...")
             self.embeddings = HuggingFaceEmbeddings(
                 model_name=embedding_model,
-                model_kwargs={'device': 'cpu'},
-                encode_kwargs={'batch_size': 32, 'show_progress_bar': True}
+                model_kwargs={'device': 'cpu'}
             )
             
             # Split documents with optimized settings

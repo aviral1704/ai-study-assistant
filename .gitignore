@@ -43,6 +43,11 @@ chroma_db/
 temp/
 uploads/
 .streamlit/
+.cache/
+.learning_data/
+.audio_cache/
+exports/
+*.pkl
 
 # Jupyter
 .ipynb_checkpoints

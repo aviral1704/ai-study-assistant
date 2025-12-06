@@ -1,0 +1,49 @@
+# Test Document for AI Study Assistant
+
+## Chapter 1: Introduction to Machine Learning
+
+Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on the development of computer programs that can access data and use it to learn for themselves.
+
+### Key Concepts:
+- **Supervised Learning**: Learning from labeled data
+- **Unsupervised Learning**: Finding patterns in unlabeled data  
+- **Reinforcement Learning**: Learning through trial and error
+
+### Important Definitions:
+1. **Algorithm**: A set of rules or instructions given to an AI system
+2. **Training Data**: The dataset used to train a machine learning model
+3. **Model**: The output of a machine learning algorithm trained on data
+
+## Chapter 2: Neural Networks
+
+Neural networks are computing systems inspired by biological neural networks. They consist of interconnected nodes (neurons) that process information.
+
+### Architecture:
+- Input Layer: Receives the initial data
+- Hidden Layers: Process the data through weighted connections
+- Output Layer: Produces the final result
+
+### Applications:
+- Image recognition
+- Natural language processing
+- Speech recognition
+- Autonomous vehicles
+
+## Chapter 3: Deep Learning
+
+Deep learning is a subset of machine learning that uses neural networks with multiple layers. It has revolutionized AI by achieving human-level performance in many tasks.
+
+### Key Advantages:
+1. Automatic feature extraction
+2. Handles large amounts of data
+3. Improves with more data
+4. Achieves state-of-the-art results
+
+### Popular Architectures:
+- Convolutional Neural Networks (CNNs) for images
+- Recurrent Neural Networks (RNNs) for sequences
+- Transformers for language tasks
+
+## Conclusion
+
+Machine learning, neural networks, and deep learning form the foundation of modern AI. Understanding these concepts is crucial for anyone studying artificial intelligence.

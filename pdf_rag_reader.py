@@ -1,6 +1,7 @@
 """
 Advanced PDF RAG Reader - Optimized for Large Documents & Student Learning
 Handles 5000+ page PDFs with detailed, study-focused summaries
+Now with Real-Time Web Search Integration for Enhanced Context
 """
 
 import os
@@ -8,16 +9,32 @@ from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 import hashlib
 import pickle
+import warnings
+warnings.filterwarnings('ignore')
 
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.llms import Ollama
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
-from langchain.schema import Document
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain_ollama import OllamaLLM
+from langchain_classic.chains import RetrievalQA
+from langchain_core.prompts import PromptTemplate
+from langchain_core.documents import Document
+
+# Real-time search imports
+try:
+    from duckduckgo_search import DDGS
+    SEARCH_AVAILABLE = True
+except ImportError:
+    SEARCH_AVAILABLE = False
+    print("⚠️  Web search not available. Install: pip install duckduckgo-search")
+
+try:
+    import wikipedia
+    WIKIPEDIA_AVAILABLE = True
+except ImportError:
+    WIKIPEDIA_AVAILABLE = False
+    print("⚠️  Wikipedia search not available. Install: pip install wikipedia")
 
 
 class PDFRAGReader:
@@ -105,11 +122,10 @@ class PDFRAGReader:
         
         # Initialize LLM with streaming for better UX
         print(f"🤖 Initializing {model_name} model...")
-        self.llm = Ollama(
+        self.llm = OllamaLLM(
             model=model_name,
             temperature=0.3,  # Lower for more factual responses
             num_ctx=4096,  # Larger context window
-            callbacks=[StreamingStdOutCallbackHandler()]
         )
         
         # Create retrieval chain with more chunks for detailed answers
@@ -602,6 +618,141 @@ Focus on the main ideas and key information."""
         
         result = self.qa_chain({"query": prompt})
         return result['result']
+    
+    def web_search(self, query: str, num_results: int = 5) -> List[Dict[str, str]]:
+        """Search the web for additional context and information."""
+        if not SEARCH_AVAILABLE:
+            return [{"title": "Search Unavailable", "snippet": "Install duckduckgo-search to enable web search"}]
+        
+        try:
+            print(f"🌐 Searching web for: {query}")
+            ddgs = DDGS()
+            results = []
+            
+            for r in ddgs.text(query, max_results=num_results):
+                results.append({
+                    'title': r.get('title', 'No title'),
+                    'snippet': r.get('body', 'No description'),
+                    'url': r.get('href', '')
+                })
+            
+            return results
+        except Exception as e:
+            print(f"Web search error: {e}")
+            return [{"title": "Search Error", "snippet": str(e)}]
+    
+    def get_wikipedia_context(self, topic: str) -> str:
+        """Get Wikipedia summary for additional context."""
+        if not WIKIPEDIA_AVAILABLE:
+            return "Wikipedia not available. Install: pip install wikipedia"
+        
+        try:
+            print(f"📚 Fetching Wikipedia context for: {topic}")
+            summary = wikipedia.summary(topic, sentences=5, auto_suggest=True)
+            return summary
+        except wikipedia.exceptions.DisambiguationError as e:
+            return f"Multiple topics found. Please be more specific: {', '.join(e.options[:5])}"
+        except wikipedia.exceptions.PageError:
+            return f"No Wikipedia page found for '{topic}'"
+        except Exception as e:
+            return f"Wikipedia error: {str(e)}"
+    
+    def ask_with_web_context(self, question: str, use_web: bool = True, show_sources: bool = True) -> Dict:
+        """
+        Answer questions using both PDF content and real-time web search for enhanced context.
+        
+        Args:
+            question: Question to ask
+            use_web: Whether to include web search results
+            show_sources: Whether to show source pages
+            
+        Returns:
+            Dictionary with answer, sources, and web context
+        """
+        print(f"❓ Question with web context: {question}\n")
+        
+        # Get answer from PDF
+        pdf_result = self.ask_question(question, show_sources)
+        
+        web_context = ""
+        web_results = []
+        
+        if use_web and SEARCH_AVAILABLE:
+            # Search web for additional context
+            web_results = self.web_search(question, num_results=3)
+            
+            if web_results:
+                web_context = "\n\nADDITIONAL WEB CONTEXT:\n"
+                for i, result in enumerate(web_results, 1):
+                    web_context += f"\n{i}. {result['title']}\n   {result['snippet']}\n"
+        
+        # Enhance answer with web context
+        if web_context:
+            enhanced_prompt = f"""Based on the document content and the following additional web context, provide a comprehensive answer:
+
+DOCUMENT ANSWER:
+{pdf_result['answer']}
+
+{web_context}
+
+Synthesize both sources to provide the most complete, accurate, and up-to-date answer. 
+Mention if the web context adds new information or confirms the document content."""
+            
+            try:
+                enhanced_result = self.qa_chain({"query": enhanced_prompt})
+                final_answer = enhanced_result['result']
+            except:
+                final_answer = pdf_result['answer'] + "\n\n" + web_context
+        else:
+            final_answer = pdf_result['answer']
+        
+        return {
+            'answer': final_answer,
+            'sources': pdf_result.get('sources', []),
+            'web_results': web_results,
+            'has_web_context': bool(web_context)
+        }
+    
+    def get_current_knowledge(self, topic: str) -> str:
+        """Get current, real-time knowledge about a topic to supplement PDF content."""
+        print(f"🌍 Fetching current knowledge about: {topic}\n")
+        
+        # Get Wikipedia context
+        wiki_context = self.get_wikipedia_context(topic)
+        
+        # Get web search results
+        web_results = self.web_search(f"latest information about {topic}", num_results=3)
+        
+        # Combine contexts
+        combined_context = f"""CURRENT KNOWLEDGE ABOUT: {topic}
+
+WIKIPEDIA SUMMARY:
+{wiki_context}
+
+RECENT WEB INFORMATION:
+"""
+        
+        for i, result in enumerate(web_results, 1):
+            combined_context += f"\n{i}. {result['title']}\n   {result['snippet']}\n"
+        
+        # Ask LLM to synthesize
+        prompt = f"""Based on the following current information, provide a comprehensive, up-to-date explanation:
+
+{combined_context}
+
+Provide a clear, educational summary that:
+1. Explains the current understanding of this topic
+2. Highlights recent developments or discoveries
+3. Connects to practical applications
+4. Is accurate and well-sourced
+
+Make this helpful for students who want the most current information."""
+        
+        try:
+            result = self.qa_chain({"query": prompt})
+            return result['result']
+        except:
+            return combined_context
     
     def get_document_info(self) -> Dict:
         """Get basic information about the document."""

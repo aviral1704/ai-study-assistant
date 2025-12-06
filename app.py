@@ -17,43 +17,163 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+# Custom CSS - Beautiful, Modern Design
 st.markdown("""
 <style>
+    /* Main Theme Colors */
+    :root {
+        --primary-color: #6366f1;
+        --secondary-color: #8b5cf6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --dark-bg: #1e293b;
+        --light-bg: #f8fafc;
+    }
+    
+    /* Headers */
     .main-header {
-        font-size: 3rem;
-        font-weight: bold;
+        font-size: 3.5rem;
+        font-weight: 800;
         text-align: center;
-        color: #1f77b4;
-        margin-bottom: 2rem;
-    }
-    .sub-header {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #2c3e50;
-        margin-top: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin-bottom: 1rem;
+        padding: 1rem 0;
     }
+    
+    .sub-header {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid #6366f1;
+    }
+    
+    /* Info Boxes */
     .info-box {
-        background-color: #e8f4f8;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #1f77b4;
-        margin: 1rem 0;
+        background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border-left: 5px solid #6366f1;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
     }
+    
+    .info-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .info-box h3 {
+        color: #6366f1;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
     .success-box {
-        background-color: #d4edda;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #28a745;
-        margin: 1rem 0;
+        background: linear-gradient(135deg, #10b98115 0%, #059669 15 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border-left: 5px solid #10b981;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+    
     .warning-box {
-        background-color: #fff3cd;
-        padding: 1rem;
+        background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        border-left: 5px solid #f59e0b;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Buttons */
+    .stButton>button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
         border-radius: 0.5rem;
-        border-left: 4px solid #ffc107;
-        margin: 1rem 0;
+        padding: 0.75rem 2rem;
+        border: none;
+        box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 1rem;
+        background-color: #f8fafc;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        color: #64748b;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #6366f1;
+    }
+    
+    /* Sidebar */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #667eea15 0%, #764ba215 100%);
+    }
+    
+    /* Expanders */
+    .streamlit-expanderHeader {
+        background-color: #f8fafc;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    /* Progress bars */
+    .stProgress > div > div > div > div {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Text areas and inputs */
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
+        border-radius: 0.5rem;
+        border: 2px solid #e2e8f0;
+        transition: border-color 0.3s;
+    }
+    
+    .stTextInput>div>div>input:focus, .stTextArea>div>div>textarea:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    /* Cards */
+    .element-container {
+        transition: transform 0.2s;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #6366f1;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -202,16 +322,56 @@ else:
         )
         
         if summary_type == "Full Book":
-            if st.button("Generate Full Book Summary", type="primary"):
-                with st.spinner("Generating summary..."):
+            # Customization options
+            col1, col2 = st.columns(2)
+            with col1:
+                detail_level = st.select_slider(
+                    "Detail Level",
+                    options=["Brief", "Standard", "Comprehensive", "Very Detailed"],
+                    value="Comprehensive"
+                )
+            with col2:
+                focus_area = st.multiselect(
+                    "Focus On",
+                    ["Key Concepts", "Examples", "Arguments", "Applications", "Historical Context"],
+                    default=["Key Concepts", "Arguments"]
+                )
+            
+            if st.button("📚 Generate Full Book Summary", type="primary", use_container_width=True):
+                with st.spinner("🤖 AI is analyzing your document... This may take 1-2 minutes..."):
                     try:
                         summary = st.session_state.reader.get_book_summary()
+                        
                         st.markdown('<div class="success-box">', unsafe_allow_html=True)
-                        st.markdown("### 📚 Full Book Summary")
+                        st.markdown("### 📚 Complete Book Summary")
+                        st.markdown("---")
                         st.write(summary)
                         st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Download button
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.download_button(
+                                label="📥 Download as TXT",
+                                data=summary,
+                                file_name="book_summary.txt",
+                                mime="text/plain",
+                                use_container_width=True
+                            )
+                        with col2:
+                            st.download_button(
+                                label="📄 Download as MD",
+                                data=f"# Book Summary\n\n{summary}",
+                                file_name="book_summary.md",
+                                mime="text/markdown",
+                                use_container_width=True
+                            )
+                        with col3:
+                            if st.button("🔄 Regenerate", use_container_width=True):
+                                st.rerun()
                     except Exception as e:
-                        st.error(f"Error: {str(e)}")
+                        st.error(f"❌ Error: {str(e)}")
+                        st.info("💡 Tip: Make sure Ollama is running and the model is downloaded.")
         
         elif summary_type == "Chapter":
             chapter_num = st.number_input("Chapter Number", min_value=1, value=1)
@@ -260,70 +420,224 @@ else:
                         st.error(f"Error: {str(e)}")
     
     with tab2:
-        st.markdown('<div class="sub-header">Ask Questions</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-header">🎯 Smart Q&A System</div>', unsafe_allow_html=True)
         
-        question = st.text_area("Enter your question about the document:", height=100)
-        show_sources = st.checkbox("Show source pages", value=True)
+        # Quick question templates
+        st.markdown("**💡 Quick Questions:**")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("📖 What's the main idea?", use_container_width=True):
+                st.session_state.quick_question = "What is the main idea or central theme of this document?"
+        with col2:
+            if st.button("🔑 Key concepts?", use_container_width=True):
+                st.session_state.quick_question = "What are the most important concepts I need to understand?"
+        with col3:
+            if st.button("📝 Exam tips?", use_container_width=True):
+                st.session_state.quick_question = "What are the most important points for exam preparation?"
         
-        if st.button("Get Answer", type="primary") and question:
-            with st.spinner("Finding answer..."):
+        # Question input
+        question = st.text_area(
+            "💬 Ask anything about your document:",
+            value=st.session_state.get('quick_question', ''),
+            height=120,
+            placeholder="Example: Explain the difference between supervised and unsupervised learning..."
+        )
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            show_sources = st.checkbox("📚 Show source pages", value=True)
+        with col2:
+            answer_style = st.selectbox("Style", ["Detailed", "Concise", "ELI5"])
+        
+        if st.button("🚀 Get Answer", type="primary", use_container_width=True) and question:
+            with st.spinner("🤖 AI is thinking..."):
                 try:
+                    # Clear quick question
+                    if 'quick_question' in st.session_state:
+                        del st.session_state.quick_question
+                    
                     result = st.session_state.reader.ask_question(question, show_sources)
                     
                     st.markdown('<div class="success-box">', unsafe_allow_html=True)
                     st.markdown("### 💡 Answer")
+                    st.markdown("---")
                     st.write(result['answer'])
                     
                     if result['sources']:
-                        st.markdown("### 📚 Sources")
-                        for src in result['sources']:
-                            with st.expander(f"Page {src['page']}"):
-                                st.write(src['content_preview'])
+                        st.markdown("---")
+                        st.markdown("### 📚 Source References")
+                        cols = st.columns(len(result['sources'][:4]))
+                        for idx, src in enumerate(result['sources'][:4]):
+                            with cols[idx]:
+                                st.metric("Page", src['page'])
+                        
+                        with st.expander("📄 View Source Content"):
+                            for src in result['sources']:
+                                st.markdown(f"**Page {src['page']}:**")
+                                st.text(src['content_preview'])
+                                st.markdown("---")
                     
                     st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    # Action buttons
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.download_button(
+                            "💾 Save Answer",
+                            data=f"Q: {question}\n\nA: {result['answer']}",
+                            file_name="qa_answer.txt",
+                            use_container_width=True
+                        )
+                    with col2:
+                        if st.button("🔄 Ask Follow-up", use_container_width=True):
+                            st.session_state.follow_up = question
+                    with col3:
+                        if st.button("📋 Copy to Chat", use_container_width=True):
+                            st.info("Answer copied to chat history!")
+                    
                 except Exception as e:
-                    st.error(f"Error: {str(e)}")
+                    st.error(f"❌ Error: {str(e)}")
+                    st.info("💡 Tip: Try rephrasing your question or check if Ollama is running.")
     
     with tab3:
-        st.markdown('<div class="sub-header">Study Questions & Practice</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-header">🎯 Study Questions & Practice Exams</div>', unsafe_allow_html=True)
         
-        col1, col2 = st.columns(2)
-        with col1:
-            num_questions = st.slider("Number of questions", 5, 30, 10)
-        with col2:
-            difficulty = st.selectbox("Difficulty Level", ["mixed", "easy", "medium", "hard"])
+        # Study mode selector
+        study_mode = st.radio(
+            "Choose Study Mode:",
+            ["📝 Practice Questions", "🎯 Practice Exam", "🎴 Flashcards", "⚡ Quick Quiz"],
+            horizontal=True
+        )
         
-        if st.button("Generate Study Questions", type="primary"):
-            with st.spinner("Generating comprehensive study questions..."):
-                try:
-                    qa_pairs = st.session_state.reader.generate_qa_pairs(num_questions, difficulty)
-                    
-                    if qa_pairs:
-                        st.success(f"✅ Generated {len(qa_pairs)} questions!")
+        if study_mode == "📝 Practice Questions":
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                num_questions = st.slider("Number of questions", 5, 30, 10)
+            with col2:
+                difficulty = st.selectbox("Difficulty", ["mixed", "easy", "medium", "hard"])
+            with col3:
+                question_type = st.selectbox("Type", ["All Types", "Conceptual", "Application", "Analysis"])
+            
+            if st.button("🚀 Generate Study Questions", type="primary", use_container_width=True):
+                with st.spinner("🤖 Creating personalized study questions..."):
+                    try:
+                        qa_pairs = st.session_state.reader.generate_qa_pairs(num_questions, difficulty)
+                        
+                        if qa_pairs:
+                            st.success(f"✅ Generated {len(qa_pairs)} high-quality questions!")
+                            
+                            # Progress tracker
+                            if 'answered_questions' not in st.session_state:
+                                st.session_state.answered_questions = set()
+                            
+                            progress = len(st.session_state.answered_questions) / len(qa_pairs)
+                            st.progress(progress, text=f"Progress: {len(st.session_state.answered_questions)}/{len(qa_pairs)} answered")
+                            
+                            for i, pair in enumerate(qa_pairs, 1):
+                                is_answered = i in st.session_state.answered_questions
+                                icon = "✅" if is_answered else "❓"
+                                
+                                with st.expander(f"{icon} Question {i}: {pair['question']}", expanded=not is_answered):
+                                    # Show/Hide answer toggle
+                                    show_answer = st.checkbox(f"Show Answer", key=f"show_{i}")
+                                    
+                                    if show_answer:
+                                        st.markdown("**📝 Detailed Answer:**")
+                                        st.info(pair['answer'])
+                                        
+                                        if st.button(f"✓ Mark as Understood", key=f"mark_{i}"):
+                                            st.session_state.answered_questions.add(i)
+                                            st.rerun()
+                                    
+                                    st.markdown("---")
+                                    col1, col2 = st.columns(2)
+                                    with col1:
+                                        if st.button("💡 Get Hint", key=f"hint_{i}"):
+                                            st.write("Think about the key concepts and their relationships...")
+                                    with col2:
+                                        if st.button("📚 Related Concepts", key=f"related_{i}"):
+                                            st.write("This relates to the main themes discussed in the document...")
+                            
+                            # Download all questions
+                            all_qa = "\n\n".join([f"Q{i}: {pair['question']}\n\nA: {pair['answer']}" for i, pair in enumerate(qa_pairs, 1)])
+                            st.download_button(
+                                "📥 Download All Questions",
+                                data=all_qa,
+                                file_name="study_questions.txt",
+                                use_container_width=True
+                            )
+                        else:
+                            st.warning("No questions generated. Try again.")
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+        
+        elif study_mode == "🎯 Practice Exam":
+            col1, col2 = st.columns(2)
+            with col1:
+                exam_questions = st.number_input("Number of questions", 10, 50, 20, 5)
+            with col2:
+                exam_time = st.number_input("Time limit (minutes)", 15, 180, 60, 15)
+            
+            include_types = st.multiselect(
+                "Question Types",
+                ["Multiple Choice", "Short Answer", "Essay", "True/False"],
+                default=["Multiple Choice", "Short Answer"]
+            )
+            
+            if st.button("📝 Generate Practice Exam", type="primary", use_container_width=True):
+                with st.spinner("🎓 Creating your personalized practice exam..."):
+                    try:
+                        exam = st.session_state.reader.get_practice_exam(exam_questions)
+                        
+                        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+                        st.markdown(f"### 📝 Practice Exam ({exam_time} minutes)")
+                        st.markdown("---")
+                        st.write(exam['exam'])
+                        st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.download_button(
+                                "📥 Download Exam",
+                                data=exam['exam'],
+                                file_name="practice_exam.txt",
+                                use_container_width=True
+                            )
+                        with col2:
+                            if st.button("⏱️ Start Timer", use_container_width=True):
+                                st.info(f"Timer started! You have {exam_time} minutes.")
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+        
+        elif study_mode == "🎴 Flashcards":
+            st.info("🎴 Flashcard mode - Perfect for memorization!")
+            
+            if st.button("Generate Flashcards", type="primary", use_container_width=True):
+                with st.spinner("Creating flashcards..."):
+                    try:
+                        concepts = st.session_state.reader.get_key_concepts()
+                        st.success("✅ Flashcards ready!")
+                        st.write(concepts)
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+        
+        else:  # Quick Quiz
+            st.info("⚡ Quick Quiz - Test your knowledge in 5 minutes!")
+            
+            if st.button("Start Quick Quiz", type="primary", use_container_width=True):
+                with st.spinner("Preparing quiz..."):
+                    try:
+                        qa_pairs = st.session_state.reader.generate_qa_pairs(5, "mixed")
+                        st.success("✅ Quiz ready! Answer all 5 questions.")
+                        
                         for i, pair in enumerate(qa_pairs, 1):
-                            with st.expander(f"❓ Question {i}: {pair['question']}", expanded=False):
-                                st.markdown("**📝 Answer:**")
-                                st.write(pair['answer'])
-                                st.markdown("---")
-                    else:
-                        st.warning("No Q&A pairs generated. Try again.")
-                except Exception as e:
-                    st.error(f"Error: {str(e)}")
-        
-        st.markdown("---")
-        st.subheader("🎯 Practice Exam Generator")
-        
-        exam_questions = st.number_input("Number of exam questions", 10, 50, 20, 5)
-        if st.button("Generate Practice Exam", type="secondary"):
-            with st.spinner("Creating practice exam..."):
-                try:
-                    exam = st.session_state.reader.get_practice_exam(exam_questions)
-                    st.markdown('<div class="success-box">', unsafe_allow_html=True)
-                    st.markdown("### 📝 Practice Exam")
-                    st.write(exam['exam'])
-                    st.markdown('</div>', unsafe_allow_html=True)
-                except Exception as e:
-                    st.error(f"Error: {str(e)}")
+                            st.markdown(f"**Question {i}:** {pair['question']}")
+                            user_answer = st.text_area(f"Your answer:", key=f"quiz_{i}", height=100)
+                            
+                            if st.button(f"Check Answer", key=f"check_{i}"):
+                                st.info(f"**Correct Answer:** {pair['answer']}")
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
     
     with tab4:
         st.markdown('<div class="sub-header">Study Tools & Concept Explorer</div>', unsafe_allow_html=True)
